@@ -1,0 +1,68 @@
+﻿<Page
+    x:Class="RedrockAssess.Pages.ListViewPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RedrockAssess.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <TextBlock x:Name="VideoListName" Text="视频列表" FontSize="26" Margin="5"/>
+        </Grid>
+        <Grid Grid.Row="1">
+            <ListView x:Name="ListView" >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <RelativePanel Grid.Row="0">
+                                <Image x:Name="image" Source="{Binding profile_image}" Width="40" Height="40"/>
+                                <TextBlock x:Name="name" Text="{Binding name}" FontSize="15" RelativePanel.RightOf="image" Margin="2"/>
+                                <TextBlock x:Name="time" Text="{Binding create_time}" FontSize="12" RelativePanel.Below="name" RelativePanel.RightOf="image" Margin="2"/>
+                                <!--<TextBlock x:Name="title" Text="名字" FontSize="15" HorizontalAlignment="Left"/>
+                            <TextBlock x:Name="time" Text="时间" FontSize="14" HorizontalAlignment="Right"/>
+                            <TextBlock x:Name="hate" Text="hate" FontSize="12" RelativePanel.Below="title" HorizontalAlignment="Left"/>
+                            <TextBlock x:Name="love" Text="love" FontSize="12" RelativePanel.Below="time" RelativePanel.RightOf="hate"/>-->
+                            </RelativePanel>
+                            <Grid Grid.Row="1">
+                                <MediaElement x:Name="video" Source="{Binding video_uri}" Width="auto" Height="auto" AreTransportControlsEnabled="True">
+                                    <MediaElement.TransportControls>
+                                        <MediaTransportControls IsPlaybackRateButtonVisible="True" IsPlaybackRateEnabled="True"
+                                                                IsZoomButtonVisible="False" IsZoomEnabled="False" IsHitTestVisible="True"
+                                                                IsCompact="True"/>
+                                    </MediaElement.TransportControls>
+                                </MediaElement>
+                            </Grid>
+                            <TextBlock x:Name="text" Text="{Binding text}" FontSize="24" TextWrapping="Wrap" Margin="0,10,0,0"/>
+                            <Grid Grid.Row="3" Margin="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                    <SymbolIcon x:Name="loveButtn" Symbol="Like" Height="20"/>
+                                    <TextBlock x:Name="love" Text="{Binding love}" Height="20"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                    <SymbolIcon x:Name="hateButton" Symbol="Dislike" Height="20"/>
+                                    <TextBlock x:Name="hate" Text="{Binding hate}" Height="20" />
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </Grid>
+</Page>
