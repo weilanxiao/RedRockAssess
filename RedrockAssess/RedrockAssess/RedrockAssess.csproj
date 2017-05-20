@@ -102,6 +102,9 @@
     <Compile Include="Model\Cache.cs" />
     <Compile Include="NetWork\DownLoad.cs" />
     <Compile Include="NetWork\NetWork.cs" />
+    <Compile Include="Pages\CachePage.xaml.cs">
+      <DependentUpon>CachePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ListViewPage.xaml.cs">
       <DependentUpon>ListViewPage.xaml</DependentUpon>
     </Compile>
@@ -131,6 +134,10 @@
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\CachePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ListViewPage.xaml">
       <SubType>Designer</SubType>

@@ -22,6 +22,7 @@ using Windows.UI.Xaml.Hosting;
 using Windows.UI.Composition;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using Windows.Storage;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -55,16 +56,20 @@ namespace RedrockAssess.Pages
             this.InitializeComponent();
             //ListView.ContainerContentChanging += Refresh;
         }
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            //refresh.Height = 0;
+            string content = await NetWork.NetWork.NetWorks(api);
+            string json = GetItem(content);
+            list = JsonConvert.DeserializeObject<ObservableCollection<Contentlist>>(json);
+            ListView.ItemsSource = list;
+        }
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChanged(string name)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-
-        private void scrollViewer_Loaded(object sender, RoutedEventArgs e)
-        {
-            ScrollRoot.ChangeView(null, 30, null);
         }
 
         public bool isLoading = false;
@@ -93,14 +98,6 @@ namespace RedrockAssess.Pages
                 }
             }
         }
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            string content = await NetWork.NetWork.NetWorks(api);
-            string json = GetItem(content);
-            list = JsonConvert.DeserializeObject<ObservableCollection<Contentlist>>(json);
-            ListView.ItemsSource = list;
-        }
 
         public string GetItem(string content)
         {
@@ -128,10 +125,7 @@ namespace RedrockAssess.Pages
 
         private void ListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            //string uri = ((Contentlist)e.ClickedItem).video_uri;
-            //MediaElement m = new MediaElement();
-            //m.Source = new Uri(uri);
-            //StartPlay(m);
+            string uri = ((Contentlist)e.ClickedItem).video_uri;
         }
 
         private void ListView_Loaded(object sender, RoutedEventArgs e)
@@ -218,7 +212,7 @@ namespace RedrockAssess.Pages
                 if (sv.VerticalOffset == 0.0)
                 {
                     IsPullRefresh = true;
-                    await Task.Delay(2000);
+                    //await Task.Delay(2000);
                     string content = await NetWork.NetWork.NetWorks(api);
                     string json = GetItem(content);
                     list = JsonConvert.DeserializeObject<ObservableCollection<Contentlist>>(json);
@@ -245,14 +239,17 @@ namespace RedrockAssess.Pages
 
         }
 
-        private void downLoadButton_Click(object sender, RoutedEventArgs e)
+        private async void downLoadButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            AppBarButton down = sender as AppBarButton;
+            var s = down.DataContext as Contentlist;
+            StorageFile file = await NetWork.DownLoad.DownLoadItem(s.video_uri);
+            Debug.WriteLine(file);
         }
 
         private void ScrollRoot_Loaded(object sender, RoutedEventArgs e)
         {
-
+            ScrollRoot.ChangeView(null, 50, null);
         }
     }
 }

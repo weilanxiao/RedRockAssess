@@ -19,7 +19,7 @@
             <ScrollViewer x:Name="ScrollRoot" Loaded="ScrollRoot_Loaded"
                           ViewChanged="ScrollRoot_ViewChanged">
                 <StackPanel Orientation="Vertical">
-                    <ProgressRing IsActive="{x:Bind IsPullRefresh,Mode=OneWay}" Height="50"></ProgressRing>
+                    <ProgressRing x:Name="refresh" IsActive="{x:Bind IsPullRefresh,Mode=OneWay}" Height="50"></ProgressRing>
                     <ListView x:Name="ListView" ScrollViewer.VerticalScrollBarVisibility="Auto"                       
                       ItemClick="ListView_ItemClick" IsItemClickEnabled="True" SizeChanged="ListView_SizeChanged">
                 <ListView.ItemTemplate>
@@ -40,15 +40,16 @@
                             <TextBlock x:Name="hate" Text="hate" FontSize="12" RelativePanel.Below="title" HorizontalAlignment="Left"/>
                             <TextBlock x:Name="love" Text="love" FontSize="12" RelativePanel.Below="time" RelativePanel.RightOf="hate"/>-->
                                 </RelativePanel>
-                                <Grid Grid.Row="1">
-                                    <MediaElement  Source="{Binding video_uri}" Width="auto" Height="auto" AreTransportControlsEnabled="True" AutoPlay="False">
-                                        <MediaElement.TransportControls>
-                                            <MediaTransportControls IsPlaybackRateButtonVisible="True" IsPlaybackRateEnabled="True"
+                                    <Grid Grid.Row="1" >
+                                        <Image x:Name="post" Source="{Binding profile_image}"/>
+                                        <MediaElement x:Name="play" Source="{Binding video_uri}" Width="auto" Height="auto" AreTransportControlsEnabled="True" AutoPlay="False">
+                                            <MediaElement.TransportControls>
+                                                <MediaTransportControls IsPlaybackRateButtonVisible="True" IsPlaybackRateEnabled="True"
                                                                 IsZoomButtonVisible="False" IsZoomEnabled="False" IsHitTestVisible="True"
                                                                 />
-                                        </MediaElement.TransportControls>
-                                    </MediaElement>
-                                </Grid>
+                                            </MediaElement.TransportControls>
+                                        </MediaElement>
+                                    </Grid>
                                 <TextBlock x:Name="text" Text="{Binding text}" FontSize="24" TextWrapping="Wrap" Margin="0,10,0,0"/>
                                 <Grid Grid.Row="3" Margin="2" Height="35">
                                     <Grid.ColumnDefinitions>

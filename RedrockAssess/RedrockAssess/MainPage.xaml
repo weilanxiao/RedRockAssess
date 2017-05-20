@@ -8,6 +8,45 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Frame x:Name="ContentFrame"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+        </Grid>
+        <Button Grid.Row="0" Grid.Column="0"
+                    Name="HamburgerButton" 
+                    FontFamily="Current" 
+                    Content="&#x2261;"
+                    FontSize="30"
+                    Click="HamburgerButton_Click"/>
+        <SplitView Grid.Row="1"
+                   Name="MySplitView"
+                   IsPaneOpen="False"
+                   DisplayMode="CompactOverlay" 
+                   OpenPaneLength="200"
+                   CompactPaneLength="57">
+            <SplitView.Pane>
+                <ListBox SelectionMode="Single" Name="IconsListBos" SelectionChanged="IconsListBos_SelectionChanged">
+                    <ListBoxItem Name="First" x:FieldModifier="Public">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="36" Text="&#xE10F;"/>
+                            <TextBlock Text="Video" FontSize="24" Margin="20,0,0,0"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                    <ListBoxItem Name="Second" x:FieldModifier="Public">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="36" Text="&#xE10F;"/>
+                            <TextBlock Text="Cache" FontSize="24" Margin="20,0,0,0"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                </ListBox>
+            </SplitView.Pane>
+        </SplitView>
+        <Frame Grid.Column="1" Grid.Row="1" x:Name="ContentFrame"/>
     </Grid>
 </Page>

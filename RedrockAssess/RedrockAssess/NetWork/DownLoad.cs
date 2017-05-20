@@ -11,6 +11,7 @@ namespace RedrockAssess.NetWork
 {
     class DownLoad
     {
+        CreationCollisionOption options = CreationCollisionOption.OpenIfExists;
         public static async Task<StorageFile> DownLoadItem(string uri)
         {
             try
@@ -21,7 +22,7 @@ namespace RedrockAssess.NetWork
                 {
                     string []str=uri.Split('/');
                     string filename = str[str.Length - 1];
-                    var file =await ApplicationData.Current.LocalCacheFolder.CreateFileAsync(filename);
+                    var file =await ApplicationData.Current.LocalCacheFolder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
                     using (var stream = await file.OpenAsync(FileAccessMode.ReadWrite))
                     {
                         await stream.WriteAsync(buffer);

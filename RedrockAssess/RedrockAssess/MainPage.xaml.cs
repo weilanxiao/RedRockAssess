@@ -26,7 +26,37 @@ namespace RedrockAssess
         public MainPage()
         {
             this.InitializeComponent();
+        }
+
+        private void VideoButton_Click(object sender, RoutedEventArgs e)
+        {
             ContentFrame.Navigate(typeof(ListViewPage));
+        }
+
+        private void CacheButton_Click(object sender, RoutedEventArgs e)
+        {
+            ContentFrame.Navigate(typeof(CachePage));
+        }
+
+        private void HamburgerButton_Click(object sender, RoutedEventArgs e)
+        {
+            MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
+        }
+
+        private void IconsListBos_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (First.IsSelected)//选择该项
+            {
+                //ReturnButton.Visibility = Visibility.Visible;//设置可见性
+                ContentFrame.Navigate(typeof(ListViewPage));//跳转到该页
+                //MainText.Text = "首页";
+            }
+            else if (Second.IsSelected)
+            {
+                //ReturnButton.Visibility = Visibility.Visible;
+                ContentFrame.Navigate(typeof(CachePage));
+                //MainText.Text = "精华";
+            }
         }
     }
 }
