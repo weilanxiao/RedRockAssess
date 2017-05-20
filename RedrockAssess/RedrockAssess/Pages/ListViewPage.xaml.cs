@@ -20,6 +20,7 @@ using Newtonsoft.Json;
 using System.Runtime.InteropServices;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Composition;
+using System.Threading.Tasks;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -29,6 +30,7 @@ namespace RedrockAssess.Pages
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
     public sealed partial class ListViewPage : Page
+
     {
         ObservableCollection<Contentlist> list = new ObservableCollection<Contentlist>();
         ObservableCollection<Contentlist> list1 = new ObservableCollection<Contentlist>();
@@ -42,16 +44,6 @@ namespace RedrockAssess.Pages
             base.OnNavigatedTo(e);
             string content = await NetWork.NetWork.NetWorks(api);
             string json = GetItem(content);
-            //string image = GetImage(json);
-            list = JsonConvert.DeserializeObject<ObservableCollection<Contentlist>>(json);
-            ListView.ItemsSource = list;
-        }
-        public async void LoadMoreItemsAsync(uint count)
-        {
-            string _count = count.ToString();
-            _count = "page=" + _count;            
-            string content = await NetWork.NetWork.NetWorks(api.Replace("page=1", _count));
-            string json = GetItem(content);
             list = JsonConvert.DeserializeObject<ObservableCollection<Contentlist>>(json);
             ListView.ItemsSource = list;
         }
@@ -64,20 +56,8 @@ namespace RedrockAssess.Pages
             JToken json1 = json0["pagebean"];
             JToken json2 = json1["contentlist"];
             _content = json2.ToString();
-            Debug.WriteLine(json2);
             return _content;
         }
-        //public string GetImage(string json)
-        //{
-        //    JToken jobect = JToken.Parse(json);
-        //    string profile_image = jobect["profile_image"].ToString();
-        //    Debug.WriteLine(profile_image);
-        //    return profile_image;
-        //}
-        //public void GetVisual()
-        //{
-        //    ListView;
-        //}
         public void GetHeight(ListViewItem listItem)
         {
             double height = listItem.ActualHeight;
@@ -95,10 +75,10 @@ namespace RedrockAssess.Pages
         private void ListView_ItemClick(object sender, ItemClickEventArgs e)
         {
 
-            //string uri = ((Contentlist)e.ClickedItem).video_uri;
-            //MediaElement m = new MediaElement();
-            //m.Source = new Uri(uri);
-            //StartPlay(m);
+            string uri = ((Contentlist)e.ClickedItem).video_uri;
+            MediaElement m = new MediaElement();
+            m.Source = new Uri(uri);
+            StartPlay(m);
         }
 
         private void ListView_Loaded(object sender, RoutedEventArgs e)
@@ -106,18 +86,22 @@ namespace RedrockAssess.Pages
             //GetScroll(ListView, 0);
             //ExperessionAnimation();
             //LoadMoreItemsAsync(2);
-            sv = FindVisualChildByName<ScrollViewer>(list, "ScrollViewer");
-            sb = FindVisualChildByName<ScrollBar>(sv, "VerticalScrollBar");
-            sb.ValueChanged += Sb_ValueChanged;
         }
-        public async void A()
+        public async void LoadMoreItemsAsync(int count)
         {
-            string _count = "2";
-            _count = "page=" + _count;
+            string _count = "page=" + count.ToString();
             string content = await NetWork.NetWork.NetWorks(api.Replace("page=1", _count));
             string json = GetItem(content);
             list1 = JsonConvert.DeserializeObject<ObservableCollection<Contentlist>>(json);
-            ListView.ScrollIntoView(list1);
+            foreach (var item in list1)
+            {
+                if (!list1.Equals(item))
+                {
+                    list.Add(item);
+                }
+                Debug.WriteLine(list1.Equals(item));
+            }
+            ListView.ItemsSource = list;
         }
 
         private ScrollViewer listview_Sc;
@@ -165,24 +149,15 @@ namespace RedrockAssess.Pages
             refreshing_visual.StartAnimation("Offset.Y", animation2);
         }
 
-        private double _height;
+        private int count=1;
         private void ScrollRoot_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
         {
+
             if (ScrollRoot.VerticalOffset == ScrollRoot.ScrollableHeight)
             {
-                LoadMoreItemsAsync(2);//滚动条到底部
+                count += 1;
+                LoadMoreItemsAsync(count);//滚动条到底部
             }
-            else
-            {
-                //_height = ScrollRoot.VerticalOffset;
-            }            
-
-            //if (_isLoding) return;
-            //if (ScrollRoot.VerticalOffset <= ScrollRoot.ScrollableHeight - 500) return;
-            //if (_currentPage >= _countPage + 1) return;
-
-            //_isLoding = true;
-
         }
 
         private void ListView_SizeChanged(object sender, SizeChangedEventArgs e)
