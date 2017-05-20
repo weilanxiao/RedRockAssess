@@ -16,53 +16,58 @@
             <TextBlock x:Name="VideoListName" Text="视频列表" FontSize="26" Margin="5"/>
         </Grid>
         <Grid Grid.Row="1">
-            <ListView x:Name="ListView" >
+            <ScrollViewer x:Name="ScrollRoot" ViewChanged="ScrollRoot_ViewChanged">
+                <ListView x:Name="ListView" ScrollViewer.VerticalScrollBarVisibility="Auto"                       
+                      ItemClick="ListView_ItemClick" IsItemClickEnabled="True" SizeChanged="ListView_SizeChanged">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                            </Grid.RowDefinitions>
-                            <RelativePanel Grid.Row="0">
-                                <Image x:Name="image" Source="{Binding profile_image}" Width="40" Height="40"/>
-                                <TextBlock x:Name="name" Text="{Binding name}" FontSize="15" RelativePanel.RightOf="image" Margin="2"/>
-                                <TextBlock x:Name="time" Text="{Binding create_time}" FontSize="12" RelativePanel.Below="name" RelativePanel.RightOf="image" Margin="2"/>
-                                <!--<TextBlock x:Name="title" Text="名字" FontSize="15" HorizontalAlignment="Left"/>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <RelativePanel Grid.Row="0">
+                                    <Image x:Name="image" Source="{Binding profile_image}" Width="40" Height="40"/>
+                                    <TextBlock x:Name="name" Text="{Binding name}" FontSize="15" RelativePanel.RightOf="image" Margin="2"/>
+                                    <TextBlock x:Name="time" Text="{Binding create_time}" FontSize="12" RelativePanel.Below="name" RelativePanel.RightOf="image" Margin="2"/>
+                                    <!--<TextBlock x:Name="title" Text="名字" FontSize="15" HorizontalAlignment="Left"/>
                             <TextBlock x:Name="time" Text="时间" FontSize="14" HorizontalAlignment="Right"/>
                             <TextBlock x:Name="hate" Text="hate" FontSize="12" RelativePanel.Below="title" HorizontalAlignment="Left"/>
                             <TextBlock x:Name="love" Text="love" FontSize="12" RelativePanel.Below="time" RelativePanel.RightOf="hate"/>-->
-                            </RelativePanel>
-                            <Grid Grid.Row="1">
-                                <MediaElement x:Name="video" Source="{Binding video_uri}" Width="auto" Height="auto" AreTransportControlsEnabled="True">
-                                    <MediaElement.TransportControls>
-                                        <MediaTransportControls IsPlaybackRateButtonVisible="True" IsPlaybackRateEnabled="True"
+                                </RelativePanel>
+                                <Grid Grid.Row="1">
+                                    <MediaElement  Source="{Binding video_uri}" Width="auto" Height="auto" AreTransportControlsEnabled="True" AutoPlay="False">
+                                        <MediaElement.TransportControls>
+                                            <MediaTransportControls IsPlaybackRateButtonVisible="True" IsPlaybackRateEnabled="True"
                                                                 IsZoomButtonVisible="False" IsZoomEnabled="False" IsHitTestVisible="True"
                                                                 IsCompact="True"/>
-                                    </MediaElement.TransportControls>
-                                </MediaElement>
+                                        </MediaElement.TransportControls>
+                                    </MediaElement>
+                                </Grid>
+                                <TextBlock x:Name="text" Text="{Binding text}" FontSize="24" TextWrapping="Wrap" Margin="0,10,0,0"/>
+                                <Grid Grid.Row="3" Margin="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                        <SymbolIcon x:Name="loveButtn" Symbol="Like" Height="20"/>
+                                        <TextBlock x:Name="love" Text="{Binding love}" Height="20"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                        <SymbolIcon x:Name="hateButton" Symbol="Dislike" Height="20"/>
+                                        <TextBlock x:Name="hate" Text="{Binding hate}" Height="20" />
+                                    </StackPanel>
+                                </Grid>
                             </Grid>
-                            <TextBlock x:Name="text" Text="{Binding text}" FontSize="24" TextWrapping="Wrap" Margin="0,10,0,0"/>
-                            <Grid Grid.Row="3" Margin="10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <StackPanel Grid.Column="0" Orientation="Horizontal">
-                                    <SymbolIcon x:Name="loveButtn" Symbol="Like" Height="20"/>
-                                    <TextBlock x:Name="love" Text="{Binding love}" Height="20"/>
-                                </StackPanel>
-                                <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                    <SymbolIcon x:Name="hateButton" Symbol="Dislike" Height="20"/>
-                                    <TextBlock x:Name="hate" Text="{Binding hate}" Height="20" />
-                                </StackPanel>
-                            </Grid>
-                        </Grid>
+
+
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            </ScrollViewer>
         </Grid>
     </Grid>
 </Page>
