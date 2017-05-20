@@ -99,6 +99,8 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\BaseModel.cs" />
+    <Compile Include="Model\Cache.cs" />
+    <Compile Include="NetWork\DownLoad.cs" />
     <Compile Include="NetWork\NetWork.cs" />
     <Compile Include="Pages\ListViewPage.xaml.cs">
       <DependentUpon>ListViewPage.xaml</DependentUpon>

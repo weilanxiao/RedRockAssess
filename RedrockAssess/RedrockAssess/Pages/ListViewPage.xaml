@@ -21,7 +21,7 @@
                       ItemClick="ListView_ItemClick" IsItemClickEnabled="True" SizeChanged="ListView_SizeChanged">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
+                            <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>
                                     <RowDefinition Height="*"/>
@@ -42,13 +42,14 @@
                                         <MediaElement.TransportControls>
                                             <MediaTransportControls IsPlaybackRateButtonVisible="True" IsPlaybackRateEnabled="True"
                                                                 IsZoomButtonVisible="False" IsZoomEnabled="False" IsHitTestVisible="True"
-                                                                IsCompact="True"/>
+                                                                />
                                         </MediaElement.TransportControls>
                                     </MediaElement>
                                 </Grid>
                                 <TextBlock x:Name="text" Text="{Binding text}" FontSize="24" TextWrapping="Wrap" Margin="0,10,0,0"/>
                                 <Grid Grid.Row="3" Margin="10">
                                     <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
@@ -60,11 +61,12 @@
                                         <SymbolIcon x:Name="hateButton" Symbol="Dislike" Height="20"/>
                                         <TextBlock x:Name="hate" Text="{Binding hate}" Height="20" />
                                     </StackPanel>
+                                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                        <SymbolIcon x:Name="downButton" Symbol="Download" Height="20"/>
+                                    </StackPanel>
                                 </Grid>
                             </Grid>
-
-
-                    </DataTemplate>
+                        </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
             </ScrollViewer>
