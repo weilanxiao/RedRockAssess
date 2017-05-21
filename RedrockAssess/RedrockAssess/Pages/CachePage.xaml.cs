@@ -24,9 +24,12 @@ namespace RedrockAssess.Pages
     /// </summary>
     public sealed partial class CachePage : Page
     {
+        public static CachePage cachePage;
         public CachePage()
         {
             this.InitializeComponent();
+            cachePage = this;
+            NavigationCacheMode = NavigationCacheMode.Enabled;
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -45,13 +48,13 @@ namespace RedrockAssess.Pages
                 x.name = x.path.Replace(_path, "");
                 list.Add(x);
             }
-            pathList.ItemsSource = list;
+            CacheList.ItemsSource = list;
         }
 
-        private void pathList_ItemClick(object sender, ItemClickEventArgs e)
+        private void CathList_ItemClick(object sender, ItemClickEventArgs e)
         {
-            
-            MainPage.frame.ContentFrame.Navigate(typeof(PlayPage),e);
+            Cache c = e.ClickedItem as Cache;
+            MainPage.frame.ContentFrame.Navigate(typeof(PlayPage), c);
         }
     }
 }

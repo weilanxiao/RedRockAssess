@@ -21,7 +21,7 @@
                 <StackPanel Orientation="Vertical">
                     <ProgressRing x:Name="refresh" IsActive="{x:Bind IsPullRefresh,Mode=OneWay}" Height="50"></ProgressRing>
                     <ListView x:Name="ListView" ScrollViewer.VerticalScrollBarVisibility="Auto"                       
-                      ItemClick="ListView_ItemClick" IsItemClickEnabled="True" SizeChanged="ListView_SizeChanged">
+                      ItemClick="ListView_ItemClick" IsItemClickEnabled="True">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                             <Grid>

@@ -24,10 +24,13 @@ namespace RedrockAssess
     public sealed partial class MainPage : Page
     {
         public static MainPage frame;
+
+        public bool IoN = true;//后退刷新标识
         public MainPage()
         {
             this.InitializeComponent();
             frame = this;
+            title.Text = "Cache";
             ContentFrame.Navigate(typeof(CachePage));
         }
 
@@ -59,6 +62,14 @@ namespace RedrockAssess
                 //ReturnButton.Visibility = Visibility.Visible;
                 ContentFrame.Navigate(typeof(CachePage));
                 title.Text = "Cache";
+            }
+        }
+
+        private void ReturnButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (ContentFrame.CanGoBack)
+            {
+                ContentFrame.GoBack();
             }
         }
     }

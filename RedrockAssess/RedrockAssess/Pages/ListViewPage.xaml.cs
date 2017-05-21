@@ -31,50 +31,45 @@ namespace RedrockAssess.Pages
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class ListViewPage : Page,INotifyPropertyChanged
-
+    public sealed partial class ListViewPage : Page, INotifyPropertyChanged
     {
         ObservableCollection<Contentlist> list = new ObservableCollection<Contentlist>();
         ObservableCollection<Contentlist> list1 = new ObservableCollection<Contentlist>();
         private string api = @"http://route.showapi.com/255-1?showapi_appid=38525&showapi_sign=b4a7ceb202cf4eba9abd8041b01b7b31&type=41&page=1";
-        public bool _isPullRefresh = false;
-        public bool IsPullRefresh
-        {
-            get
-            {
-                return _isPullRefresh;
-            }
-
-            set
-            {
-                _isPullRefresh = value;
-                OnPropertyChanged(nameof(IsPullRefresh));
-            }
-        }
         public ListViewPage()
         {
             this.InitializeComponent();
-            //ListView.ContainerContentChanging += Refresh;
+            NavigationCacheMode = NavigationCacheMode.Enabled;//启用页面缓存
         }
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)//导航至此页面方法
         {
             base.OnNavigatedTo(e);
             //refresh.Height = 0;
+            if (MainPage.frame.IoN)
+            {
+                GetListContent();
+            }
+        }
+        public async void GetListContent()//获取list内容
+        {
             string content = await NetWork.NetWork.NetWorks(api);
             string json = GetItem(content);
             list = JsonConvert.DeserializeObject<ObservableCollection<Contentlist>>(json);
             ListView.ItemsSource = list;
         }
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void OnPropertyChanged(string name)
+        public string GetItem(string content)//获取详细内容
         {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            string _content = "";
+            JObject jobject = JObject.Parse(content);
+            JToken json0 = jobject["showapi_res_body"];
+            JToken json1 = json0["pagebean"];
+            JToken json2 = json1["contentlist"];
+            _content = json2.ToString();
+            return _content;
         }
-
         public bool isLoading = false;
         private object o = new object();
-        public void Refresh(ListViewBase sender,ContainerContentChangingEventArgs args)
+        public void Refresh(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
             lock (o)
             {
@@ -87,7 +82,7 @@ namespace RedrockAssess.Pages
                         {
                             await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
                             {
-                                string content =await NetWork.NetWork.NetWorks(api);
+                                string content = await NetWork.NetWork.NetWorks(api);
                                 string json = GetItem(content);
                                 list = JsonConvert.DeserializeObject<ObservableCollection<Contentlist>>(json);
                                 ListView.ItemsSource = list;
@@ -97,17 +92,6 @@ namespace RedrockAssess.Pages
                     }
                 }
             }
-        }
-
-        public string GetItem(string content)
-        {
-            string _content = "";
-            JObject jobject = JObject.Parse(content);
-            JToken json0 = jobject["showapi_res_body"];
-            JToken json1 = json0["pagebean"];
-            JToken json2 = json1["contentlist"];
-            _content = json2.ToString();
-            return _content;
         }
         public void GetHeight(ListViewItem listItem)
         {
@@ -123,18 +107,15 @@ namespace RedrockAssess.Pages
             videos.Play();
         }
 
-        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
+        double offset = 0.0;
+        private void ListView_ItemClick(object sender, ItemClickEventArgs e)//listitem点击事件
         {
-            string uri = ((Contentlist)e.ClickedItem).video_uri;
+            offset = ScrollRoot.VerticalOffset;
+            MainPage.frame.IoN = false;
+            Contentlist c = (Contentlist)e.ClickedItem;
+            MainPage.frame.ContentFrame.Navigate(typeof(PlayPage), c);
         }
-
-        private void ListView_Loaded(object sender, RoutedEventArgs e)
-        {
-            //GetScroll(ListView, 0);
-            //ExperessionAnimation();
-            //LoadMoreItemsAsync(2);
-        }
-        public async void LoadMoreItemsAsync(int count)
+        public async void LoadMoreItemsAsync(int count)//底部加载更多方法
         {
             string _count = "page=" + count.ToString();
             string content = await NetWork.NetWork.NetWorks(api.Replace("page=1", _count));
@@ -151,53 +132,27 @@ namespace RedrockAssess.Pages
             ListView.ItemsSource = list;
         }
 
-        private ScrollViewer listview_Sc;
-        private void GetScroll(DependencyObject o, int n)
+        public bool _isPullRefresh = false;//下拉刷新1
+        public event PropertyChangedEventHandler PropertyChanged;//下拉刷新2
+        public bool IsPullRefresh//下拉刷新3
         {
-            try
+            get
             {
-                int count = VisualTreeHelper.GetChildrenCount(o);
-                if (count > 0)
-                {
-                    for (int i = 0; i < count; i++)
-                    {
-                        var child = VisualTreeHelper.GetChild(o, count - 1);
-                        if (n == 0)
-                        {
-                            if (child is ScrollViewer)
-                            {
-                                listview_Sc = child as ScrollViewer;
-                            }
-                            else
-                            {
-                                GetScroll(VisualTreeHelper.GetChild(o, count - 1), n);
-                            }
-                        }
-                        else if (n == 1)
-                        {
-
-                        }
-                    }
-                }
+                return _isPullRefresh;
             }
-            catch (Exception)
+
+            set
             {
+                _isPullRefresh = value;
+                OnPropertyChanged(nameof(IsPullRefresh));
             }
         }
-        private Visual rect_1_visual;
-        private Visual refreshing_visual;
-        private ExpressionAnimation animation2;
-        private void ExperessionAnimation()
+        public void OnPropertyChanged(string name)//下拉刷新4
         {
-            refreshing_visual = ElementCompositionPreview.GetElementVisual(listview_Sc);
-            var propertyset = ElementCompositionPreview.GetScrollViewerManipulationPropertySet(listview_Sc);
-            animation2 = refreshing_visual.Compositor.CreateExpressionAnimation("(PropertySet.Translation.Y==0)?40:0");
-            animation2.SetReferenceParameter("PropertySet", propertyset);
-            refreshing_visual.StartAnimation("Offset.Y", animation2);
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-
-        private int count=1;
-        private async void ScrollRoot_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
+        private int count = 1;
+        private async void ScrollRoot_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)//滚动条事件
         {
 
             if (ScrollRoot.VerticalOffset == ScrollRoot.ScrollableHeight)
@@ -211,8 +166,7 @@ namespace RedrockAssess.Pages
             {
                 if (sv.VerticalOffset == 0.0)
                 {
-                    IsPullRefresh = true;
-                    //await Task.Delay(2000);
+                    IsPullRefresh = true;//下拉刷新
                     string content = await NetWork.NetWork.NetWorks(api);
                     string json = GetItem(content);
                     list = JsonConvert.DeserializeObject<ObservableCollection<Contentlist>>(json);
@@ -221,11 +175,6 @@ namespace RedrockAssess.Pages
                 }
                 IsPullRefresh = false;
             }
-
-        }
-
-        private void ListView_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
 
         }
 
@@ -239,15 +188,16 @@ namespace RedrockAssess.Pages
 
         }
 
-        private async void downLoadButton_Click(object sender, RoutedEventArgs e)
+        private async void downLoadButton_Click(object sender, RoutedEventArgs e)//下载按钮事件
         {
             AppBarButton down = sender as AppBarButton;
             var s = down.DataContext as Contentlist;
             StorageFile file = await NetWork.DownLoad.DownLoadItem(s.video_uri);
             Debug.WriteLine(file);
+            MainPage.frame.title.Text = "Video";
         }
 
-        private void ScrollRoot_Loaded(object sender, RoutedEventArgs e)
+        private void ScrollRoot_Loaded(object sender, RoutedEventArgs e)//滚动条加载事件
         {
             ScrollRoot.ChangeView(null, 50, null);
         }

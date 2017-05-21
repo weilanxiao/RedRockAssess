@@ -11,9 +11,9 @@ namespace RedrockAssess.NetWork
 {
     class DownLoad
     {
-        CreationCollisionOption options = CreationCollisionOption.OpenIfExists;
-        public static async Task<StorageFile> DownLoadItem(string uri)
+        public static async Task<StorageFile> DownLoadItem(string uri)//下载方法
         {
+            MainPage.frame.title.Text += "下载中";
             try
             {
                 HttpClient httpClient = new HttpClient();

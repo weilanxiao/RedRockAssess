@@ -9,8 +9,8 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid x:Name="play" >
-            
-        <MediaElement AreTransportControlsEnabled="True" Width="auto" Source=""> 
+
+            <MediaElement Source="" AreTransportControlsEnabled="True" Width="auto"> 
             <MediaElement.TransportControls>
                 <MediaTransportControls IsZoomButtonVisible="False" IsZoomEnabled="False" />
             </MediaElement.TransportControls>
