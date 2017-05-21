@@ -32,11 +32,6 @@
                     Click="ReturnButton_Click"
                     x:FieldModifier="Public"/>
         </Grid>
-        <!--<Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>-->
-        
         <SplitView Grid.Row="1" Grid.Column="0"
                    Name="MySplitView"
                    IsPaneOpen="False"
@@ -55,6 +50,12 @@
                         <StackPanel Orientation="Horizontal">
                             <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="36" Text="&#xE10F;"/>
                             <TextBlock Text="Cache" FontSize="24" Margin="20,0,0,0"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                    <ListBoxItem Name="Third" x:FieldModifier="Public">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="36" Text="&#xE10F;"/>
+                            <TextBlock Text="History" FontSize="24" Margin="20,0,0,0"/>
                         </StackPanel>
                     </ListBoxItem>
                 </ListBox>

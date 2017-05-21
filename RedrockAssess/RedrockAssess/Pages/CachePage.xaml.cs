@@ -34,6 +34,7 @@ namespace RedrockAssess.Pages
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+            MainPage.frame.Second.IsSelected = true;
             GetPath();
         }
         List<Cache> list = new List<Cache>();
@@ -41,10 +42,20 @@ namespace RedrockAssess.Pages
         public void GetPath()
         {
             var files = Directory.GetFiles(_path);
-            foreach (var a in files)
+            //int j = files.Count();
+            //for(int i=list.Count-1; i <= j-1; i++)
+            //{
+            //    Cache x = new Cache();
+            //    var a = files[i];
+            //    x.path = a;
+            //    x.name = x.path.Replace(_path, "");
+            //    list.Add(x);
+            //    Debug.WriteLine(list[i]);
+            //}
+            foreach(var s in files)
             {
                 Cache x = new Cache();
-                x.path = a;
+                x.path = s;
                 x.name = x.path.Replace(_path, "");
                 list.Add(x);
             }
@@ -54,6 +65,16 @@ namespace RedrockAssess.Pages
         private void CathList_ItemClick(object sender, ItemClickEventArgs e)
         {
             Cache c = e.ClickedItem as Cache;
+            try
+            {
+                HistoryModel hs = new HistoryModel();
+                hs.path = c.path;
+                hs.name = c.name;
+                HistoryPage.historyPage.InsertSQL(hs);
+            }catch(Exception ex)
+            {
+                MainPage.frame.title.Text = "数据库插入异常！";
+            }
             MainPage.frame.ContentFrame.Navigate(typeof(PlayPage), c);
         }
     }

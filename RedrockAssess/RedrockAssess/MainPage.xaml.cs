@@ -59,9 +59,12 @@ namespace RedrockAssess
             }
             else if (Second.IsSelected)
             {
-                //ReturnButton.Visibility = Visibility.Visible;
                 ContentFrame.Navigate(typeof(CachePage));
                 title.Text = "Cache";
+            }else if (Third.IsSelected)
+            {
+                ContentFrame.Navigate(typeof(HistoryPage));
+                title.Text = "History";
             }
         }
 

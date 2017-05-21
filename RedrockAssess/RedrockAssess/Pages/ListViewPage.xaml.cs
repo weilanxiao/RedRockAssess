@@ -44,7 +44,7 @@ namespace RedrockAssess.Pages
         protected override void OnNavigatedTo(NavigationEventArgs e)//导航至此页面方法
         {
             base.OnNavigatedTo(e);
-            //refresh.Height = 0;
+            MainPage.frame.First.IsSelected = true;
             if (MainPage.frame.IoN)
             {
                 GetListContent();
@@ -53,19 +53,38 @@ namespace RedrockAssess.Pages
         public async void GetListContent()//获取list内容
         {
             string content = await NetWork.NetWork.NetWorks(api);
-            string json = GetItem(content);
-            list = JsonConvert.DeserializeObject<ObservableCollection<Contentlist>>(json);
-            ListView.ItemsSource = list;
+            if(content== "请求异常！")
+            {
+                MainPage.frame.title.Text = "网络请求异常！";
+            }
+            else
+            {
+                string json = GetItem(content);
+                if(json== "json反序列化异常！")
+                {
+                    MainPage.frame.title.Text = "json反序列化异常！";
+                }
+                list = JsonConvert.DeserializeObject<ObservableCollection<Contentlist>>(json);
+                ListView.ItemsSource = list;
+            }               
         }
         public string GetItem(string content)//获取详细内容
         {
             string _content = "";
-            JObject jobject = JObject.Parse(content);
-            JToken json0 = jobject["showapi_res_body"];
-            JToken json1 = json0["pagebean"];
-            JToken json2 = json1["contentlist"];
-            _content = json2.ToString();
-            return _content;
+            try
+            {
+                JObject jobject = JObject.Parse(content);
+                JToken json0 = jobject["showapi_res_body"];
+                JToken json1 = json0["pagebean"];
+                JToken json2 = json1["contentlist"];
+                _content = json2.ToString();
+                return _content;
+            }
+            catch(Exception ex)
+            {
+                return _content = "json反序列化异常！";
+            }
+
         }
         public bool isLoading = false;
         private object o = new object();
@@ -113,6 +132,16 @@ namespace RedrockAssess.Pages
             offset = ScrollRoot.VerticalOffset;
             MainPage.frame.IoN = false;
             Contentlist c = (Contentlist)e.ClickedItem;
+            try
+            {
+                HistoryModel hs = new HistoryModel();
+                hs.path = c.video_uri;
+                hs.name = c.name;
+                HistoryPage.historyPage.InsertSQL(hs);
+            }catch(Exception ex)
+            {
+                MainPage.frame.title.Text = "数据库插入异常！";
+            }
             MainPage.frame.ContentFrame.Navigate(typeof(PlayPage), c);
         }
         public async void LoadMoreItemsAsync(int count)//底部加载更多方法
@@ -152,7 +181,7 @@ namespace RedrockAssess.Pages
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
         private int count = 1;
-        private async void ScrollRoot_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)//滚动条事件
+        private void ScrollRoot_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)//滚动条事件
         {
 
             if (ScrollRoot.VerticalOffset == ScrollRoot.ScrollableHeight)
@@ -167,10 +196,7 @@ namespace RedrockAssess.Pages
                 if (sv.VerticalOffset == 0.0)
                 {
                     IsPullRefresh = true;//下拉刷新
-                    string content = await NetWork.NetWork.NetWorks(api);
-                    string json = GetItem(content);
-                    list = JsonConvert.DeserializeObject<ObservableCollection<Contentlist>>(json);
-                    ListView.ItemsSource = list;
+                    GetListContent();
                     sv.ChangeView(null, 50, null);
                 }
                 IsPullRefresh = false;
@@ -193,8 +219,18 @@ namespace RedrockAssess.Pages
             AppBarButton down = sender as AppBarButton;
             var s = down.DataContext as Contentlist;
             StorageFile file = await NetWork.DownLoad.DownLoadItem(s.video_uri);
-            Debug.WriteLine(file);
-            MainPage.frame.title.Text = "Video";
+            if (file == null)
+            {
+                MainPage.frame.title.Text = "下载异常！";
+                await Task.Delay(3000);
+                MainPage.frame.title.Text = "Video";
+            }
+            else
+            {
+                MainPage.frame.title.Text = "下载完成！";
+                await Task.Delay(3000);
+                MainPage.frame.title.Text = "Video";
+            }
         }
 
         private void ScrollRoot_Loaded(object sender, RoutedEventArgs e)//滚动条加载事件

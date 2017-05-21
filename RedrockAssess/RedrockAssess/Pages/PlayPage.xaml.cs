@@ -51,6 +51,11 @@ namespace RedrockAssess.Pages
                         MainPage.frame.title.Text = "Cache";
                     }
                 }                
+            }else if(e.Parameter is HistoryModel)
+            {
+                HistoryModel hs = e.Parameter as HistoryModel;
+                p = hs.path;
+                Play(p);
             }
             else
             {
