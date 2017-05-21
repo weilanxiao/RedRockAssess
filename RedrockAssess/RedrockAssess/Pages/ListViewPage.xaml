@@ -13,7 +13,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-            
         </Grid>
         <Grid Grid.Row="1">
             <ScrollViewer x:Name="ScrollRoot" Loaded="ScrollRoot_Loaded"
@@ -41,7 +40,6 @@
                             <TextBlock x:Name="love" Text="love" FontSize="12" RelativePanel.Below="time" RelativePanel.RightOf="hate"/>-->
                                 </RelativePanel>
                                     <Grid Grid.Row="1" >
-                                        <Image x:Name="post" Source="{Binding profile_image}"/>
                                         <MediaElement x:Name="play" Source="{Binding video_uri}" Width="auto" Height="auto" AreTransportControlsEnabled="True" AutoPlay="False">
                                             <MediaElement.TransportControls>
                                                 <MediaTransportControls IsPlaybackRateButtonVisible="True" IsPlaybackRateEnabled="True"

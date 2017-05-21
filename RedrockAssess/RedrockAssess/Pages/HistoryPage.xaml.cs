@@ -52,6 +52,7 @@ namespace RedrockAssess.Pages
             await MyConnection.InsertAsync(history);
             var query = await (MyConnection.Table<HistoryModel>().Where(v => v._ID >= 1)).ToListAsync();
             list = new List<HistoryModel>(query);
+            list.Reverse();
             HistoryList.ItemsSource = list;
         }
         public async void RefreshSQL()//刷新数据库
@@ -61,6 +62,7 @@ namespace RedrockAssess.Pages
             var query = await (MyConnection.Table<HistoryModel>().Where(
                 v => v._ID >= 1).ToListAsync());
             list = new List<HistoryModel>(query);
+            list.Reverse();
             HistoryList.ItemsSource = list;
         }
 

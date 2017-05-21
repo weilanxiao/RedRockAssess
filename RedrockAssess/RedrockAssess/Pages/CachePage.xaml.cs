@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -38,20 +39,14 @@ namespace RedrockAssess.Pages
             GetPath();
         }
         List<Cache> list = new List<Cache>();
+        /// <summary>
+        /// 缓存视频的地址 需要自己修改 下载到指定地址不会
+        /// </summary>
         string _path = @"C:\Users\GZ\AppData\Local\Packages\9788a00b-1c3d-4a8e-9df0-9aef946002c8_pdv0hatz6g5vg\LocalCache\";
+
         public void GetPath()
         {
             var files = Directory.GetFiles(_path);
-            //int j = files.Count();
-            //for(int i=list.Count-1; i <= j-1; i++)
-            //{
-            //    Cache x = new Cache();
-            //    var a = files[i];
-            //    x.path = a;
-            //    x.name = x.path.Replace(_path, "");
-            //    list.Add(x);
-            //    Debug.WriteLine(list[i]);
-            //}
             foreach(var s in files)
             {
                 Cache x = new Cache();
@@ -62,7 +57,7 @@ namespace RedrockAssess.Pages
             CacheList.ItemsSource = list;
         }
 
-        private void CathList_ItemClick(object sender, ItemClickEventArgs e)
+        private async void CathList_ItemClick(object sender, ItemClickEventArgs e)
         {
             Cache c = e.ClickedItem as Cache;
             try
@@ -75,7 +70,10 @@ namespace RedrockAssess.Pages
             {
                 MainPage.frame.title.Text = "数据库插入异常！";
             }
+            await Task.Delay(1000);
+            MainPage.frame.title.Text = "Cache";
             MainPage.frame.ContentFrame.Navigate(typeof(PlayPage), c);
+
         }
     }
 }

@@ -15,22 +15,24 @@ namespace RedrockAssess.NetWork
         public static async Task<string> NetWorks(string uri)
         {
             string content = "";
-            try
-            {
                 return await Task.Run(() =>
                 {
-                    HttpClient httpClient = new HttpClient();
-                    HttpResponseMessage httpRespone = httpClient.GetAsync(uri).Result;
-                    if (httpRespone.StatusCode != System.Net.HttpStatusCode.OK)
-                        Debug.WriteLine(httpRespone.StatusCode);
-                    return content = httpRespone.Content.ReadAsStringAsync().Result;
+                    try
+                    {
+                        HttpClient httpClient = new HttpClient();
+                        HttpResponseMessage httpRespone = httpClient.GetAsync(uri).Result;
+                        if (httpRespone.StatusCode != System.Net.HttpStatusCode.OK)
+                            Debug.WriteLine(httpRespone.StatusCode);
+                        return content = httpRespone.Content.ReadAsStringAsync().Result;
+                    }
+                    catch (Exception ex)
+                    {
+                        return content = "请求异常！";
+                        Debug.WriteLine(content);
+                    }
+
                 });
-            }
-            catch (Exception ex)
-            {
-                return content = "请求异常！";
-                Debug.WriteLine(content);
-            }
+
 
         }
     }

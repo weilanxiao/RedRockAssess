@@ -127,7 +127,7 @@ namespace RedrockAssess.Pages
         }
 
         double offset = 0.0;
-        private void ListView_ItemClick(object sender, ItemClickEventArgs e)//listitem点击事件
+        private async void ListView_ItemClick(object sender, ItemClickEventArgs e)//listitem点击事件
         {
             offset = ScrollRoot.VerticalOffset;
             MainPage.frame.IoN = false;
@@ -142,6 +142,8 @@ namespace RedrockAssess.Pages
             {
                 MainPage.frame.title.Text = "数据库插入异常！";
             }
+            await Task.Delay(1000);
+            MainPage.frame.title.Text = "Video";
             MainPage.frame.ContentFrame.Navigate(typeof(PlayPage), c);
         }
         public async void LoadMoreItemsAsync(int count)//底部加载更多方法
@@ -150,15 +152,17 @@ namespace RedrockAssess.Pages
             string content = await NetWork.NetWork.NetWorks(api.Replace("page=1", _count));
             string json = GetItem(content);
             list1 = JsonConvert.DeserializeObject<ObservableCollection<Contentlist>>(json);
+            MainPage.frame.title.Text = "Video 加载中";
             foreach (var item in list1)
             {
                 if (!list1.Equals(item))
                 {
                     list.Add(item);
-                }
-                Debug.WriteLine(list1.Equals(item));
+                    Debug.WriteLine(list1.Equals(item));
+                }               
             }
             ListView.ItemsSource = list;
+            MainPage.frame.title.Text = "Video";
         }
 
         public bool _isPullRefresh = false;//下拉刷新1
@@ -179,6 +183,10 @@ namespace RedrockAssess.Pages
         public void OnPropertyChanged(string name)//下拉刷新4
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+        private void ScrollRoot_Loaded(object sender, RoutedEventArgs e)//滚动条加载事件
+        {
+            ScrollRoot.ChangeView(null, 50, null);
         }
         private int count = 1;
         private void ScrollRoot_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)//滚动条事件
@@ -233,9 +241,5 @@ namespace RedrockAssess.Pages
             }
         }
 
-        private void ScrollRoot_Loaded(object sender, RoutedEventArgs e)//滚动条加载事件
-        {
-            ScrollRoot.ChangeView(null, 50, null);
-        }
     }
 }
