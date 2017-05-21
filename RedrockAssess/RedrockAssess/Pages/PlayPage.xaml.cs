@@ -1,7 +1,6 @@
 ﻿using RedrockAssess.Model;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -22,36 +21,23 @@ namespace RedrockAssess.Pages
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class CachePage : Page
+    public sealed partial class PlayPage : Page
     {
-        public CachePage()
+        public PlayPage()
         {
             this.InitializeComponent();
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            GetPath();
+            Cache c = e.Parameter as Cache;
+            Play(c.path);
         }
-        List<Cache> list = new List<Cache>();
-        string _path = @"C:\Users\GZ\AppData\Local\Packages\9788a00b-1c3d-4a8e-9df0-9aef946002c8_pdv0hatz6g5vg\LocalCache\";
-        public void GetPath()
+        public  void Play(string path)
         {
-            var files = Directory.GetFiles(_path);
-            foreach (var a in files)
-            {
-                Cache x = new Cache();
-                x.path = a;
-                x.name = x.path.Replace(_path, "");
-                list.Add(x);
-            }
-            pathList.ItemsSource = list;
-        }
-
-        private void pathList_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            
-            MainPage.frame.ContentFrame.Navigate(typeof(PlayPage),e);
+            MediaElement m = new MediaElement();
+            m.Source = new Uri(path);
+            play.Children.Add(m);
         }
     }
 }

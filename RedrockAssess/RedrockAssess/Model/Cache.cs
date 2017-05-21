@@ -9,6 +9,7 @@ namespace RedrockAssess.Model
     class Cache
     {
         public string name { get; set; }
+        public string path { get; set; }
 
     }
 }

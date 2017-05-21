@@ -23,9 +23,12 @@ namespace RedrockAssess
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        public static MainPage frame;
         public MainPage()
         {
             this.InitializeComponent();
+            frame = this;
+            ContentFrame.Navigate(typeof(CachePage));
         }
 
         private void VideoButton_Click(object sender, RoutedEventArgs e)
@@ -49,13 +52,13 @@ namespace RedrockAssess
             {
                 //ReturnButton.Visibility = Visibility.Visible;//设置可见性
                 ContentFrame.Navigate(typeof(ListViewPage));//跳转到该页
-                //MainText.Text = "首页";
+                title.Text = "Video";
             }
             else if (Second.IsSelected)
             {
                 //ReturnButton.Visibility = Visibility.Visible;
                 ContentFrame.Navigate(typeof(CachePage));
-                //MainText.Text = "精华";
+                title.Text = "Cache";
             }
         }
     }
