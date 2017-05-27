@@ -63,6 +63,7 @@ namespace RedrockAssess.Pages
             var query = await (MyConnection.Table<HistoryModel>().Where(
                 v => v._ID >= 1).ToListAsync());
             list = new ObservableCollection<HistoryModel>(query);
+            //list.Clear();
             HistoryList.ItemsSource = list.Reverse();
         }
 

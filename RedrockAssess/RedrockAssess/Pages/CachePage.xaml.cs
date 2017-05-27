@@ -32,12 +32,14 @@ namespace RedrockAssess.Pages
             this.InitializeComponent();
             cachePage = this;
             NavigationCacheMode = NavigationCacheMode.Enabled;
+            First();
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
             MainPage.frame.Second.IsSelected = true;
             GetPath();
+
         }
         ObservableCollection<Cache> list = new ObservableCollection<Cache>();
         /// <summary>
@@ -45,15 +47,43 @@ namespace RedrockAssess.Pages
         /// </summary>
         string _path = @"C:\Users\GZ\AppData\Local\Packages\9788a00b-1c3d-4a8e-9df0-9aef946002c8_pdv0hatz6g5vg\LocalCache\";
 
-        public void GetPath()
+        public void First()
         {
             var files = Directory.GetFiles(_path);
             foreach(var s in files)
             {
-                Cache x = new Cache();
-                x.path = s;
-                x.name = x.path.Replace(_path, "");
-                list.Add(x);
+
+            Cache x = new Cache();
+            x.path = s;
+            x.name = x.path.Replace(_path, "");
+            list.Add(x);
+            }
+            CacheList.ItemsSource = list;
+        }
+        public int flag = 0;
+        public void GetPath()
+        {
+            var files = Directory.GetFiles(_path);
+            foreach (var s in files)
+            {
+                foreach (var x in list)
+                {
+                    Debug.WriteLine(x.path);
+                    if (s==x.path)
+                    {
+                        flag = 1;
+                        break;
+                    }
+                    flag = 0;
+                }
+                if (flag == 0)
+                {
+                    Cache x = new Cache();
+                    x.path = s;
+                    x.name = x.path.Replace(_path, "");
+                    list.Add(x);
+                }
+
             }
             CacheList.ItemsSource = list;
         }
