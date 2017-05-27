@@ -1,6 +1,7 @@
 ﻿using RedrockAssess.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -40,8 +41,8 @@ namespace RedrockAssess.Pages
             {
                 Contentlist x = e.Parameter as Contentlist;
                 p = x.video_uri;
-                List<Cache> list = new List<Cache>();
-                list = CachePage.cachePage.CacheList.ItemsSource as List<Cache>;
+                ObservableCollection<Cache> list = new ObservableCollection<Cache>();
+                list = CachePage.cachePage.CacheList.ItemsSource as ObservableCollection<Cache>;
                 foreach (Cache cs in list)
                 {
                     if (p.Contains(cs.name))//在线视频缓存播放

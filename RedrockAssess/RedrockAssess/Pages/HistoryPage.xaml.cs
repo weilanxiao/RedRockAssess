@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using RedrockAssess.Model;
 using SQLite;
+using System.Collections.ObjectModel;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -25,7 +26,7 @@ namespace RedrockAssess.Pages
     public sealed partial class HistoryPage : Page
     {
         public SQLiteAsyncConnection MyConnection { get; set; }
-        List<HistoryModel> list = new List<HistoryModel>();
+        ObservableCollection<HistoryModel> list = new ObservableCollection<HistoryModel>();
         public static HistoryPage historyPage;
         public HistoryPage()
         {
@@ -51,7 +52,7 @@ namespace RedrockAssess.Pages
             await MyConnection.CreateTableAsync<HistoryModel>();
             await MyConnection.InsertAsync(history);
             var query = await (MyConnection.Table<HistoryModel>().Where(v => v._ID >= 1)).ToListAsync();
-            list = new List<HistoryModel>(query);
+            list = new ObservableCollection<HistoryModel>(query);
             list.Reverse();
             HistoryList.ItemsSource = list;
         }
@@ -61,9 +62,8 @@ namespace RedrockAssess.Pages
             await MyConnection.CreateTableAsync<HistoryModel>();
             var query = await (MyConnection.Table<HistoryModel>().Where(
                 v => v._ID >= 1).ToListAsync());
-            list = new List<HistoryModel>(query);
-            list.Reverse();
-            HistoryList.ItemsSource = list;
+            list = new ObservableCollection<HistoryModel>(query);
+            HistoryList.ItemsSource = list.Reverse();
         }
 
     }

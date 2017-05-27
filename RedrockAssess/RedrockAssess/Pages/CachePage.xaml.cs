@@ -1,6 +1,7 @@
 ﻿using RedrockAssess.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -38,7 +39,7 @@ namespace RedrockAssess.Pages
             MainPage.frame.Second.IsSelected = true;
             GetPath();
         }
-        List<Cache> list = new List<Cache>();
+        ObservableCollection<Cache> list = new ObservableCollection<Cache>();
         /// <summary>
         /// 缓存视频的地址 需要自己修改 下载到指定地址不会
         /// </summary>
